@@ -19,3 +19,13 @@ window.addEventListener('beforeunload', function (event) {
   window.localStorage.setItem('consoleStack', consoleStack)
   event.returnValue = '';
 })
+
+window.addEventListener('pagehide', function (event) {
+  event.preventDefault();
+  const message = "browser-event-checker: pagehide!";
+  console.log(message);
+  consoleStack.push(message)
+  consoleNode.innerHTML = consoleStack.join('</br>');
+  window.localStorage.setItem('consoleStack', consoleStack)
+  event.returnValue = '';
+})
