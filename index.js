@@ -1,6 +1,13 @@
 let consoleNode = document.getElementById('console');
-const initConsoleStack = window.localStorage.getItem('consoleStack')
-let consoleStack = initConsoleStack ? initConsoleStack.split(',') : []
+const clearButton = document.getElementById('clear-button');
+const initConsoleStack = window.localStorage.getItem('consoleStack');
+let consoleStack = initConsoleStack ? initConsoleStack.split(',') : [];
+
+clearButton.addEventListener('click', function(){
+  localStorage.clear();
+  consoleStack = [];
+  consoleNode.innerHTML = '';
+})
 
 window.addEventListener('load', function () {
   const message = "browser-event-checker: load!";
@@ -46,3 +53,19 @@ window.addEventListener('blur', function (event) {
   window.localStorage.setItem('consoleStack', consoleStack)
   event.returnValue = '';
 })
+
+document.addEventListener("visibilitychange", function() {
+  if (document.hidden) {
+    const message = "browser-event-checker: document hidden!";
+    consoleStack.push(message)
+    window.localStorage.setItem('consoleStack', consoleStack)
+    consoleNode.innerHTML = consoleStack.join('</br>');
+    console.log(message)
+  } else {
+    const message = "browser-event-checker: document visible!";
+    consoleStack.push(message)
+    window.localStorage.setItem('consoleStack', consoleStack)
+    consoleNode.innerHTML = consoleStack.join('</br>');
+    console.log(message)
+  }
+}, false);
