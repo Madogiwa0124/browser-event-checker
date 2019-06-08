@@ -11,7 +11,7 @@ clearButton.addEventListener('click', function(){
 
 function pushLocalStrage(message) {
   return new Promise(function(resolve){
-    consoleStack.push(message);
+    consoleStack.push(consoleStack.length + ': ' + message);
     window.localStorage.setItem('consoleStack', consoleStack);
     resolve();
   })
@@ -20,6 +20,18 @@ function pushLocalStrage(message) {
 function setConsoleStackToNode() {
   consoleNode.innerHTML = consoleStack.join('</br>');
 }
+
+window.addEventListener('pageshow', function(event) {
+  if (event.persisted) {
+    const message = "browser-event-checker: pageshow! source from cache";
+    console.log(message);
+    pushLocalStrage(message).then(setConsoleStackToNode);
+  } else {
+    const message = "browser-event-checker: pageshow! source from server";
+    console.log(message);
+    pushLocalStrage(message).then(setConsoleStackToNode);
+  }
+})
 
 window.addEventListener('load', function () {
   const message = "browser-event-checker: load!";
