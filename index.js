@@ -9,63 +9,56 @@ clearButton.addEventListener('click', function(){
   consoleNode.innerHTML = '';
 })
 
+function pushLocalStrage(message) {
+  return new Promise(function(resolve){
+    consoleStack.push(message);
+    window.localStorage.setItem('consoleStack', consoleStack);
+    resolve();
+  })
+}
+
+function setConsoleStackToNode() {
+  consoleNode.innerHTML = consoleStack.join('</br>');
+}
+
 window.addEventListener('load', function () {
   const message = "browser-event-checker: load!";
   console.log(message);
-  alert(message)
-  consoleStack.push(message)
-  consoleNode.innerHTML = consoleStack.join('</br>');
+  pushLocalStrage(message).then(setConsoleStackToNode);
 })
 
 window.addEventListener('focus', function () {
   const message = "browser-event-checker: focus!";
   console.log(message);
-  consoleStack.push(message)
-  consoleNode.innerHTML = consoleStack.join('</br>');
+  pushLocalStrage(message).then(setConsoleStackToNode);
 })
 
-window.addEventListener('beforeunload', function (event) {
-  event.preventDefault();
+window.addEventListener('beforeunload', function () {
   const message = "browser-event-checker: beforeunload!";
   console.log(message);
-  consoleStack.push(message)
-  consoleNode.innerHTML = consoleStack.join('</br>');
-  window.localStorage.setItem('consoleStack', consoleStack)
-  event.returnValue = '';
+  pushLocalStrage(message).then(setConsoleStackToNode);
 })
 
-window.addEventListener('pagehide', function (event) {
-  event.preventDefault();
+window.addEventListener('pagehide', function () {
   const message = "browser-event-checker: pagehide!";
   console.log(message);
-  consoleStack.push(message)
-  consoleNode.innerHTML = consoleStack.join('</br>');
-  window.localStorage.setItem('consoleStack', consoleStack)
-  event.returnValue = '';
+  pushLocalStrage(message).then(setConsoleStackToNode);
 })
 
-window.addEventListener('blur', function (event) {
-  event.preventDefault();
+window.addEventListener('blur', function () {
   const message = "browser-event-checker: blur!";
   console.log(message);
-  consoleStack.push(message)
-  consoleNode.innerHTML = consoleStack.join('</br>');
-  window.localStorage.setItem('consoleStack', consoleStack)
-  event.returnValue = '';
+  pushLocalStrage(message).then(setConsoleStackToNode);
 })
 
 document.addEventListener("visibilitychange", function() {
   if (document.hidden) {
     const message = "browser-event-checker: document hidden!";
-    consoleStack.push(message)
-    window.localStorage.setItem('consoleStack', consoleStack)
-    consoleNode.innerHTML = consoleStack.join('</br>');
-    console.log(message)
+    console.log(message);
+    pushLocalStrage(message).then(setConsoleStackToNode);
   } else {
     const message = "browser-event-checker: document visible!";
-    consoleStack.push(message)
-    window.localStorage.setItem('consoleStack', consoleStack)
-    consoleNode.innerHTML = consoleStack.join('</br>');
-    console.log(message)
+    console.log(message);
+    pushLocalStrage(message).then(setConsoleStackToNode);
   }
 }, false);
